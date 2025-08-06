@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Bỏ qua tệp cấu hình cá nhân để bảo vệ thông tin nhạy cảm
+application-local.properties
