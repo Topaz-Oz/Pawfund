@@ -45,12 +45,10 @@ const EventForm = ({ event = null, onSubmit, onCancel, isLoading = false }) => {
         }
     }, [event]);
 
-    // Fetch shelters for admin
+    // Fetch shelters for admin và shelter
     useEffect(() => {
-        if (isAdminUser) {
-            dispatch(fetchSheltersForEvent());
-        }
-    }, [isAdminUser, dispatch]);
+        dispatch(fetchSheltersForEvent());
+    }, [dispatch]);
 
     // Fetch volunteers for admin
     useEffect(() => {
@@ -346,32 +344,30 @@ const EventForm = ({ event = null, onSubmit, onCancel, isLoading = false }) => {
             
 
             {/* Multiple Shelter Selection */}
-            {isAdminUser && (
-                <div>
-                    <label htmlFor="shelterIds" className="block text-sm font-medium text-gray-700">
-                        Nhân viên cứu hộ phụ trách *
-                    </label>
-                    <select
-                        id="shelterIds"
-                        name="shelterIds"
-                        multiple
-                        value={formData.shelterIds || []}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                        size="4"
-                    >
-                        {shelters.map(shelter => (
-                            <option key={shelter.id} value={shelter.id}>
-                                {shelter.name} ({shelter.username})
-                            </option>
-                        ))}
-                    </select>
-                    <p className="mt-1 text-xs text-gray-500">Giữ Ctrl (Windows) hoặc Cmd (Mac) để chọn nhiều</p>
-                    {errors.shelterIds && (
-                        <p className="mt-1 text-sm text-red-600">{errors.shelterIds}</p>
-                    )}
-                </div>
-            )}
+            <div>
+                <label htmlFor="shelterIds" className="block text-sm font-medium text-gray-700">
+                    Chọn shelter cùng tổ chức (collab) *
+                </label>
+                <select
+                    id="shelterIds"
+                    name="shelterIds"
+                    multiple
+                    value={formData.shelterIds || []}
+                    onChange={handleInputChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                    size="4"
+                >
+                    {shelters.map(shelter => (
+                        <option key={shelter.id} value={shelter.id}>
+                            {shelter.name} ({shelter.username})
+                        </option>
+                    ))}
+                </select>
+                <p className="mt-1 text-xs text-gray-500">Giữ Ctrl (Windows) hoặc Cmd (Mac) để chọn nhiều. Không thể chọn shelter của chính bạn.</p>
+                {errors.shelterIds && (
+                    <p className="mt-1 text-sm text-red-600">{errors.shelterIds}</p>
+                )}
+            </div>
 
             {/* Multiple Volunteer Selection */}
             {isAdminUser && (

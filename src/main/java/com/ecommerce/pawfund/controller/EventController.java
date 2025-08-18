@@ -1,3 +1,18 @@
+    // Get all events that current shelter is a member (collab or chủ trì)
+    @GetMapping("/my-collab-events")
+    @PreAuthorize("hasRole('SHELTER')")
+    public ResponseEntity<List<EventDTO>> getMyCollabEvents(Authentication authentication) {
+        String username = authentication.getName();
+        User currentUser = userRepository.findByUsername(username).orElse(null);
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        List<EventDTO> allEvents = eventService.findAllAsDTO();
+        List<EventDTO> myEvents = allEvents.stream()
+            .filter(event -> event.getShelterIds() != null && event.getShelterIds().contains(currentUser.getId()))
+            .collect(Collectors.toList());
+        return ResponseEntity.ok(myEvents);
+    }
 package com.ecommerce.pawfund.controller;
 
 import com.ecommerce.pawfund.entity.Event;
@@ -89,12 +104,15 @@ public class EventController {
     }
 
   
-    // Get shelters for event form (ADMIN only)
+    // Get shelters for event form (ADMIN or SHELTER, SHELTER không lấy chính mình)
     @GetMapping("/shelters")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Map<String, Object>>> getSheltersForEvent() {
+    @PreAuthorize("hasAnyRole('ADMIN','SHELTER')")
+    public ResponseEntity<List<Map<String, Object>>> getSheltersForEvent(Authentication authentication) {
         List<User> shelterUsers = userRepository.findByRole(User.Role.SHELTER);
+        String username = authentication.getName();
+        User currentUser = userRepository.findByUsername(username).orElse(null);
         List<Map<String, Object>> shelters = shelterUsers.stream()
+            .filter(user -> currentUser == null || !user.getId().equals(currentUser.getId()))
             .map(user -> {
                 Map<String, Object> shelter = new HashMap<>();
                 shelter.put("id", user.getId());

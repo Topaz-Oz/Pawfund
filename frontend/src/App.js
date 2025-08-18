@@ -35,6 +35,7 @@ import ShelterUserManagementPage from './pages/shelter/ShelterUserManagementPage
 import AddPetPage from './pages/shelter/AddPetPage';
 import ShelterPetManagementPage from './pages/shelter/PetManagementPage';
 import ShelterEventsPage from './pages/shelter/ShelterEventsPage';
+import ShelterEventCreatePage from './pages/shelter/ShelterEventCreatePage';
 import ShelterAdoptionManagementPage from './pages/shelter/AdoptionManagementPage';
 import VolunteerEventsPage from './pages/volunteer/VolunteerEventsPage';
 
@@ -163,6 +164,11 @@ function App() {
               <Route path="/shelter/events" element={
                 <RoleRoute allowedRoles={['SHELTER']}>
                   <ShelterEventsPage />
+                </RoleRoute>
+              } />
+              <Route path="/shelter/events/create" element={
+                <RoleRoute allowedRoles={['SHELTER']}>
+                  <ShelterEventCreatePage />
                 </RoleRoute>
               } />
               <Route path="/volunteer/events" element={

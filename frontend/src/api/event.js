@@ -1,3 +1,7 @@
+    // Get all events that current shelter is a member (collab or chủ trì)
+    getMyCollabEvents: async () => {
+        return api.get('/events/my-collab-events');
+    }
 import api from '../util/axios';
 
 // Event API
